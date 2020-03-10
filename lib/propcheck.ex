@@ -419,7 +419,6 @@ defmodule PropCheck do
           |> PropCheck.Utils.put_opts()
 
         output_agent = PropCheck.Utils.output_agent(opts)
-        verbose? = PropCheck.Utils.verbose?(opts)
         detect_exceptions? = PropCheck.Utils.detect_exceptions?(opts)
 
         :proper.forall(
@@ -428,14 +427,6 @@ defmodule PropCheck do
             try do
               unquote(prop)
             rescue
-              e in ExUnit.AssertionError ->
-                stacktrace = System.stacktrace
-                if verbose? do
-                  e |> ExUnit.AssertionError.message() |> IO.write()
-                  formatted = Exception.format_stacktrace(stacktrace)
-                  IO.puts("stacktrace:\n#{formatted}")
-                end
-                false
               e ->
                 stacktrace = System.stacktrace
 
